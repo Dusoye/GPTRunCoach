@@ -1,7 +1,8 @@
 import requests
 import os
+import openai
 
-api_key = os.environ.get('OPENAI_API_KEY')
+openai.api_key = os.environ.get('OPENAI_API_KEY')
 
 def gather_user_input():
     print("Welcome to the Running Training Plan Generator!")
@@ -36,7 +37,7 @@ def gather_user_input():
 def generate_training_plan_via_api(user_data):
     # Convert user data to a detailed prompt for ChatGPT
     prompt = f"""
-    Generate a running training plan based on the following user details:
+    Generate a running training plan based on the following user details with blocks for building, strength and tapering if possible:
     Fitness Level: {user_data["fitness_level"]}
     Previous Races: {user_data["previous_races"]}
     Weekly Mileage: {user_data["weekly_mileage"]}
@@ -50,32 +51,28 @@ def generate_training_plan_via_api(user_data):
     End Date: {user_data["end_date"]}
     """
 
-    # API endpoint and headers (replace with your actual endpoint and API key)
-    endpoint = "https://api.openai.com/v2/completions"
-    headers = {
-        "Authorization": api_key,
-        "Content-Type": "application/json"
-    }
+    system_msg = "You are an expert running coach"
 
-    # API payload
-    data = {
-        "model": "gpt-3.5-turbo",  # or whatever model you want to use
-        "prompt": prompt,
-        "max_tokens": 1000  # adjust as needed
-    }
-
-    response = requests.post(endpoint, headers=headers, json=data)
-    response_data = response.json()
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": system_msg},
+            {"role": "user", "content": prompt}
+            ]
+        )
 
     # Extract the plan from the response
     # The exact extraction method might differ based on the API's response structure
-    plan = response_data["choices"][0]["text"].strip()
+    plan = response["choices"][0]["message"]["content"].strip()
 
     return plan
 
 def main():
     user_data = gather_user_input()
-    print(user_data)
+    training_plan = generate_training_plan_via_api(user_data)
+    
+    print("\nYour Training Plan:\n")
+    print(training_plan)
 
 if __name__ == "__main__":
     main()
