@@ -1,65 +1,150 @@
-Based on the provided details, here is a running training plan for the user from 2023-10-04 to 2024-01-04:
+Based on the provided details, here is a running training plan for the period from 2024-01-15 to 2024-06-14:
 
-Block 1: Building Phase (4 weeks)
-- Week 1: 
-  - Day 1: Easy run - 8 km at a comfortable pace
-  - Day 2: Rest or cross-training
-  - Day 3: Interval workout - 6 x 800m at 5k race pace with 400m recovery jog
-  - Day 4: Easy run - 8 km at a comfortable pace
-- Week 2: 
-  - Day 1: Easy run - 8 km at a comfortable pace
-  - Day 2: Rest or cross-training
-  - Day 3: Tempo run - 5 km at half marathon race pace
-  - Day 4: Easy run - 10 km at a comfortable pace
-- Week 3: 
-  - Day 1: Easy run - 10 km at a comfortable pace
-  - Day 2: Rest or cross-training
-  - Day 3: Long run - 18 km at a conversational pace
-  - Day 4: Easy run - 10 km at a comfortable pace
-- Week 4: 
-  - Day 1: Easy run - 10 km at a comfortable pace
-  - Day 2: Rest or cross-training
-  - Day 3: Interval workout - 8 x 400m at 5k race pace with 200m recovery jog
-  - Day 4: Easy run - 12 km at a comfortable pace
+Phase 1: Building (4 weeks)
+- Duration: 4 weeks
+- Focus: Increase mileage and build a strong base
+- Weekly Distance: 80-90 km
+- Training Days: 6
+- Paces: Easy pace (5:30-6:00 min/km), Long run pace (5:45-6:15 min/km)
 
-Block 2: Strength Phase (4 weeks)
-- Week 5: 
-  - Day 1: Easy run - 12 km at a comfortable pace
-  - Day 2: Rest or cross-training
-  - Day 3: Hill repeats - 6 x 400m uphill at 10k race pace with jog downhill recovery
-  - Day 4: Easy run - 12 km at a comfortable pace
-- Week 6: 
-  - Day 1: Easy run - 12 km at a comfortable pace
-  - Day 2: Rest or cross-training
-  - Day 3: Tempo run - 8 km at half marathon race pace
-  - Day 4: Easy run - 14 km at a comfortable pace
-- Week 7: 
-  - Day 1: Easy run - 14 km at a comfortable pace
-  - Day 2: Rest or cross-training
-  - Day 3: Long run - 22 km at a conversational pace
-  - Day 4: Easy run - 14 km at a comfortable pace
-- Week 8: 
-  - Day 1: Easy run - 14 km at a comfortable pace
-  - Day 2: Rest or cross-training
-  - Day 3: Interval workout - 10 x 400m at 5k race pace with 200m recovery jog
-  - Day 4: Easy run - 16 km at a comfortable pace
+Week 1:
+- Monday: Rest
+- Tuesday: 10 km easy
+- Wednesday: 12 km easy
+- Thursday: 10 km easy
+- Friday: 8 km easy
+- Saturday: 15 km long run (5:45-6:15 min/km)
+- Sunday: 10 km easy
 
-Block 3: Tapering Phase (2 weeks)
-- Week 9: 
-  - Day 1: Easy run - 12 km at a comfortable pace
-  - Day 2: Rest or cross-training
-  - Day 3: Tempo run - 6 km at half marathon race pace
-  - Day 4: Easy run - 10 km at a comfortable pace
-- Week 10: 
-  - Day 1: Easy run - 8 km at a comfortable pace
-  - Day 2: Rest or cross-training
-  - Day 3: Long run - 14 km at a conversational pace
-  - Day 4: Easy run - 6 km at a comfortable pace
+Week 2:
+- Monday: Rest
+- Tuesday: 12 km easy
+- Wednesday: 14 km easy
+- Thursday: 12 km easy
+- Friday: 10 km easy
+- Saturday: 18 km long run (5:45-6:15 min/km)
+- Sunday: 12 km easy
 
-Paces:
-- Easy pace: A conversational pace where you can hold a conversation while running.
-- Comfortable pace: A slightly faster pace than easy, but still comfortable and sustainable.
-- 5k race pace: The pace you would aim to run a 5k race in.
-- Half marathon race pace: The pace you would aim to run a half marathon race in.
+Week 3:
+- Monday: Rest
+- Tuesday: 14 km easy
+- Wednesday: 16 km easy
+- Thursday: 14 km easy
+- Friday: 12 km easy
+- Saturday: 20 km long run (5:45-6:15 min/km)
+- Sunday: 14 km easy
 
-Note: This training plan is a general guideline and can be adjusted based on individual preferences and progress. It is recommended to listen to your body, take rest days when needed, and consult with a coach or healthcare professional if you have any concerns or specific needs.
+Week 4:
+- Monday: Rest
+- Tuesday: 16 km easy
+- Wednesday: 18 km easy
+- Thursday: 16 km easy
+- Friday: 14 km easy
+- Saturday: 25 km long run (5:45-6:15 min/km)
+- Sunday: 16 km easy
+
+Phase 2: Strength (8 weeks)
+- Duration: 8 weeks
+- Focus: Improve endurance and speed
+- Weekly Distance: 80-90 km
+- Training Days: 6
+- Paces: Easy pace (5:30-6:00 min/km), Tempo pace (4:45-5:00 min/km), Long run pace (5:45-6:15 min/km), Interval pace (4:15-4:30 min/km)
+
+Week 5:
+- Monday: Rest
+- Tuesday: 14 km easy
+- Wednesday: 12 km easy
+- Thursday: 10 km easy
+- Friday: 8 km easy
+- Saturday: 16 km long run (5:45-6:15 min/km)
+- Sunday: 10 km easy
+
+Week 6:
+- Monday: Rest
+- Tuesday: 12 km easy
+- Wednesday: 14 km easy
+- Thursday: 12 km easy
+- Friday: 10 km easy
+- Saturday: 18 km long run (5:45-6:15 min/km)
+- Sunday: 12 km easy
+
+Week 7:
+- Monday: Rest
+- Tuesday: 14 km easy
+- Wednesday: 16 km easy
+- Thursday: 14 km easy
+- Friday: 12 km easy
+- Saturday: 20 km long run (5:45-6:15 min/km)
+- Sunday: 14 km easy
+
+Week 8:
+- Monday: Rest
+- Tuesday: 12 km easy
+- Wednesday: 14 km easy
+- Thursday: 12 km easy
+- Friday: 10 km easy
+- Saturday: 18 km long run (5:45-6:15 min/km)
+- Sunday: 12 km easy
+
+Week 9:
+- Monday: Rest
+- Tuesday: 14 km easy
+- Wednesday: 16 km easy
+- Thursday: 14 km easy
+- Friday: 12 km easy
+- Saturday: 20 km long run (5:45-6:15 min/km)
+- Sunday: 14 km easy
+
+Week 10:
+- Monday: Rest
+- Tuesday: 12 km easy
+- Wednesday: 14 km easy
+- Thursday: 12 km easy
+- Friday: 10 km easy
+- Saturday: 18 km long run (5:45-6:15 min/km)
+- Sunday: 12 km easy
+
+Week 11:
+- Monday: Rest
+- Tuesday: 14 km easy
+- Wednesday: 16 km easy
+- Thursday: 14 km easy
+- Friday: 12 km easy
+- Saturday: 20 km long run (5:45-6:15 min/km)
+- Sunday: 14 km easy
+
+Week 12:
+- Monday: Rest
+- Tuesday: 12 km easy
+- Wednesday: 14 km easy
+- Thursday: 12 km easy
+- Friday: 10 km easy
+- Saturday: 18 km long run (5:45-6:15 min/km)
+- Sunday: 12 km easy
+
+Phase 3: Tapering (2 weeks)
+- Duration: 2 weeks
+- Focus: Reduce mileage and recover for the marathon
+- Weekly Distance: 60-70 km
+- Training Days: 5
+- Paces: Easy pace (5:30-6:00 min/km), Long run pace (5:45-6:15 min/km)
+
+Week 13:
+- Monday: Rest
+- Tuesday: 10 km easy
+- Wednesday: 8 km easy
+- Thursday: 6 km easy
+- Friday: 5 km easy
+- Saturday: 12 km long run (5:45-6:15 min/km)
+- Sunday: Rest
+
+Week 14:
+- Monday: Rest
+- Tuesday: 8 km easy
+- Wednesday: 6 km easy
+- Thursday: 5 km easy
+- Friday: 4 km easy
+- Saturday: 10 km long run (5:45-6:15 min/km)
+- Sunday: Rest
+
+Note: This training plan assumes that the runner has a solid base and is injury-free. It is always recommended to consult with a coach or healthcare professional before starting a new training plan. Adjustments can be made based on individual needs and preferences.
