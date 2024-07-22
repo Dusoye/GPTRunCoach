@@ -34,8 +34,75 @@
     </div>
     <button type="submit" class="btn btn-primary">Generate Plan</button>
   </form>
-  {% if plan %}
-    <h2 class="mt-5">Generated Plan</h2>
-    <pre>{{ plan }}</pre>
+  {% if user_info %}
+    <h2 class="mt-5">User Information</h2>
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <th>Fitness Level</th>
+          <td>{{ user_info['fitness_level'] }}</td>
+        </tr>
+        <tr>
+          <th>Goal</th>
+          <td>{{ user_info['goal'] }}</td>
+        </tr>
+        <tr>
+          <th>Recent Race Distance</th>
+          <td>{{ user_info['recent_race']['distance'] }}</td>
+        </tr>
+        <tr>
+          <th>Recent Race Time</th>
+          <td>{{ user_info['recent_race']['time'] }}</td>
+        </tr>
+        <tr>
+          <th>Training Duration (weeks)</th>
+          <td>{{ user_info['training_duration_weeks'] }}</td>
+        </tr>
+        <tr>
+          <th>Days per Week</th>
+          <td>{{ user_info['days_per_week'] }}</td>
+        </tr>
+        <tr>
+          <th>Time Goal</th>
+          <td>{{ user_info['time_goal'] }}</td>
+        </tr>
+        <tr>
+          <th>Preferred Unit</th>
+          <td>{{ user_info['preferred_unit'] }}</td>
+        </tr>
+      </tbody>
+    </table>
+  {% endif %}
+
+  {% if training_plan %}
+    <h2 class="mt-5">Training Plan</h2>
+    {% for week in training_plan %}
+      <h3>Week {{ week['week'] }}</h3>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Type</th>
+            <th>Distance</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for workout in week['workouts'] %}
+            <tr>
+              <td>{{ workout['day'] }}</td>
+              <td>{{ workout['type'] }}</td>
+              <td>{{ workout['distance'] }}</td>
+              <td>{{ workout['description'] }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endfor %}
+  {% endif %}
+
+  {% if after_json %}
+    <h2 class="mt-5">Additional Information</h2>
+    <p>{{ after_json }}</p>
   {% endif %}
 {% endblock %}

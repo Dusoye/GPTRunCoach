@@ -123,7 +123,7 @@ def generate_running_plan(fitness_level, goal, weeks, days_per_week, time_goal, 
         response = client.messages.create(
             model="claude-3-5-sonnet-20240620",
             max_tokens=4000,
-            temperature=0.1,
+            temperature=0,
             system=system_prompt,
             messages=[        
                 {
@@ -146,6 +146,10 @@ def generate_running_plan(fitness_level, goal, weeks, days_per_week, time_goal, 
 @limiter.limit("10 per minute")
 def index():
     form = RunningPlanForm()
+    user_info = None
+    training_plan = None
+    after_json = None
+
     if form.validate_on_submit():
         plan = generate_running_plan(
             form.fitness_level.data,
@@ -161,37 +165,14 @@ def index():
             if json_match:
                 json_text = json_match.group(0)
 
-                before_json = plan[:json_match.start()].strip()
-                after_json = plan[json_match.end():].strip()
-
                 data = json.loads(json_text)
 
                 user_info = data['user_info']
                 training_plan = data['training_plan']
                 
-                user_info_df = pd.DataFrame([user_info])
+                after_json = plan[json_match.end():].strip()
 
-                # Convert training plan to a DataFrame
-                training_plan_list = []
-                for week in training_plan:
-                    week_num = week['week']
-                    for workout in week['workouts']:
-                        workout['week'] = week_num
-                        training_plan_list.append(workout)
-                training_plan_df = pd.DataFrame(training_plan_list)
-
-                output = f"{before_json}\n\n"
-                output += "User Information:\n"
-                output += user_info_df.to_string(index=False)
-                output += "\n\n"
-                output += "Training Plan:\n"
-                output += training_plan_df.to_string(index=False)
-                output += "\n\n"
-                output += after_json
-
-                plan = output
-
-    return render_template('index.html', form=form, plan=plan)
+    return render_template('index.html', form=form, user_info=user_info, training_plan=training_plan, after_json=after_json)
 
 
 @app.errorhandler(429)
