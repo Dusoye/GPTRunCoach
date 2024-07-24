@@ -1,108 +1,46 @@
-{% extends "base.html" %}
-
-{% block content %}
-  <h1>Running Training Plan Generator</h1>
-  <form method="POST" novalidate>
-    {{ form.hidden_tag() }}
-    <div class="form-group">
-      {{ form.fitness_level.label(class="form-label") }}
-      {{ form.fitness_level(class="form-control") }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running Plan Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Running Plan Generator</h1>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                {{ form.fitness_level.label(class="form-label") }}
+                {{ form.fitness_level(class="form-select") }}
+            </div>
+            <div class="mb-3">
+                {{ form.goal.label(class="form-label") }}
+                {{ form.goal(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.weeks.label(class="form-label") }}
+                {{ form.weeks(class="form-control", type="number") }}
+            </div>
+            <div class="mb-3">
+                {{ form.days_per_week.label(class="form-label") }}
+                {{ form.days_per_week(class="form-control", type="number") }}
+            </div>
+            <div class="mb-3">
+                {{ form.time_goal.label(class="form-label") }}
+                {{ form.time_goal(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.recent_race.label(class="form-label") }}
+                {{ form.recent_race(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.units.label(class="form-label") }}
+                {{ form.units(class="form-select") }}
+            </div>
+            <button type="submit" class="btn btn-primary">Generate Plan</button>
+        </form>
     </div>
-    <div class="form-group">
-      {{ form.goal.label(class="form-label") }}
-      {{ form.goal(class="form-control") }}
-    </div>
-    <div class="form-group">
-      {{ form.weeks.label(class="form-label") }}
-      {{ form.weeks(class="form-control") }}
-    </div>
-    <div class="form-group">
-      {{ form.days_per_week.label(class="form-label") }}
-      {{ form.days_per_week(class="form-control") }}
-    </div>
-    <div class="form-group">
-      {{ form.time_goal.label(class="form-label") }}
-      {{ form.time_goal(class="form-control") }}
-    </div>
-    <div class="form-group">
-      {{ form.recent_race.label(class="form-label") }}
-      {{ form.recent_race(class="form-control") }}
-    </div>
-    <div class="form-group">
-      {{ form.units.label(class="form-label") }}
-      {{ form.units(class="form-control") }}
-    </div>
-    <button type="submit" class="btn btn-primary">Generate Plan</button>
-  </form>
-  {% if user_info %}
-    <h2 class="mt-5">User Information</h2>
-    <table class="table table-bordered">
-      <tbody>
-        <tr>
-          <th>Fitness Level</th>
-          <td>{{ user_info['fitness_level'] }}</td>
-        </tr>
-        <tr>
-          <th>Goal</th>
-          <td>{{ user_info['goal'] }}</td>
-        </tr>
-        <tr>
-          <th>Recent Race Distance</th>
-          <td>{{ user_info['recent_race']['distance'] }}</td>
-        </tr>
-        <tr>
-          <th>Recent Race Time</th>
-          <td>{{ user_info['recent_race']['time'] }}</td>
-        </tr>
-        <tr>
-          <th>Training Duration (weeks)</th>
-          <td>{{ user_info['training_duration_weeks'] }}</td>
-        </tr>
-        <tr>
-          <th>Days per Week</th>
-          <td>{{ user_info['days_per_week'] }}</td>
-        </tr>
-        <tr>
-          <th>Time Goal</th>
-          <td>{{ user_info['time_goal'] }}</td>
-        </tr>
-        <tr>
-          <th>Preferred Unit</th>
-          <td>{{ user_info['preferred_unit'] }}</td>
-        </tr>
-      </tbody>
-    </table>
-  {% endif %}
-
-  {% if training_plan %}
-    <h2 class="mt-5">Training Plan</h2>
-    {% for week in training_plan %}
-      <h3>Week {{ week['week'] }}</h3>
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>Day</th>
-            <th>Type</th>
-            <th>Distance</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for workout in week['workouts'] %}
-            <tr>
-              <td>{{ workout['day'] }}</td>
-              <td>{{ workout['type'] }}</td>
-              <td>{{ workout['distance'] }}</td>
-              <td>{{ workout['description'] }}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% endfor %}
-  {% endif %}
-
-  {% if after_json %}
-    <h2 class="mt-5">Additional Information</h2>
-    <p>{{ after_json }}</p>
-  {% endif %}
-{% endblock %}
+</body>
+</html>

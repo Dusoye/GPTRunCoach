@@ -2,13 +2,11 @@ import os
 from flask import Flask, render_template, request, jsonify
 from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect
-from wtforms import StringField, SelectField, IntegerField, TextAreaField
+from wtforms import StringField, SelectField, IntegerField
 from wtforms.validators import DataRequired, NumberRange
 import anthropic
 from dotenv import load_dotenv
 import json
-import re
-import pandas as pd
 from functools import lru_cache
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -64,7 +62,6 @@ def generate_running_plan(fitness_level, goal, weeks, days_per_week, time_goal, 
 
     Generate the training plan in JSON format, structured as follows:
     
-    <json_structure>  
     {{
         "user_info": {{
             "fitness_level": "",
@@ -88,15 +85,13 @@ def generate_running_plan(fitness_level, goal, weeks, days_per_week, time_goal, 
                         "distance": "",
                         "description": ""
                     }}
-                    // ... (repeat for each workout day)
                 ]
             }}
-            // ... (repeat for each week)
-        ]
+        ],
+        "additional_advice": ""
     }}
-    </json_structure>
     
-    For the \"type\" field in each workout, use one of the following categories:
+    For the "type" field in each workout, use one of the following categories:
     - Easy Run
     - Long Run
     - Tempo Run
@@ -112,7 +107,7 @@ def generate_running_plan(fitness_level, goal, weeks, days_per_week, time_goal, 
     3. Incorporate rest days and recovery runs to prevent overtraining
     4. For longer training plans (12+ weeks), include a tapering period before the goal race
 
-    If the user has provided insufficient information or if there are any inconsistencies in their responses, make reasonable assumptions based on standard running training principles. For example, if a beginner aims for a marathon in 8 weeks, adjust the goal to a more realistic target like a 10K.
+    If the user has provided insufficient information or if there are any inconsistencies in their responses, make reasonable assumptions based on standard running training principles.
 
     Remember to maintain consistency in the unit of measurement (miles or kilometers) throughout the plan, as per the user's preference.
 
@@ -123,7 +118,7 @@ def generate_running_plan(fitness_level, goal, weeks, days_per_week, time_goal, 
         response = client.messages.create(
             model="claude-3-5-sonnet-20240620",
             max_tokens=4000,
-            temperature=0,
+            temperature=0.1,
             system=system_prompt,
             messages=[        
                 {
@@ -142,16 +137,31 @@ def generate_running_plan(fitness_level, goal, weeks, days_per_week, time_goal, 
         app.logger.error(f"Error generating running plan: {str(e)}")
         return None
 
+def create_user_info_table(user_info):
+    table = "<table class='table table-striped'>"
+    for key, value in user_info.items():
+        if key == 'recent_race':
+            table += f"<tr><th>{key.replace('_', ' ').title()}</th><td>{value['distance']} - {value['time']}</td></tr>"
+        else:
+            table += f"<tr><th>{key.replace('_', ' ').title()}</th><td>{value}</td></tr>"
+    table += "</table>"
+    return table
+
+def create_training_plan_table(training_plan):
+    table = "<table class='table table-striped'>"
+    table += "<thead><tr><th>Week</th><th>Day</th><th>Type</th><th>Distance</th><th>Description</th></tr></thead><tbody>"
+    for week in training_plan:
+        for workout in week['workouts']:
+            table += f"<tr><td>{week['week']}</td><td>{workout['day']}</td><td>{workout['type']}</td><td>{workout['distance']}</td><td>{workout['description']}</td></tr>"
+    table += "</tbody></table>"
+    return table
+
 @app.route('/', methods=['GET', 'POST'])
 @limiter.limit("10 per minute")
 def index():
     form = RunningPlanForm()
-    user_info = None
-    training_plan = None
-    after_json = None
-
     if form.validate_on_submit():
-        plan = generate_running_plan(
+        plan_json = generate_running_plan(
             form.fitness_level.data,
             form.goal.data,
             form.weeks.data,
@@ -160,20 +170,23 @@ def index():
             form.recent_race.data,
             form.units.data
         )
-        if plan:
-            json_match = re.search(r'\{.*\}', plan, re.DOTALL)
-            if json_match:
-                json_text = json_match.group(0)
+        if plan_json:
+            try:
+                data = json.loads(plan_json)
+                user_info_table = create_user_info_table(data['user_info'])
+                training_plan_table = create_training_plan_table(data['training_plan'])
+                additional_advice = data['additional_advice']
 
-                data = json.loads(json_text)
+                return render_template('result.html', 
+                                       user_info=user_info_table,
+                                       training_plan=training_plan_table,
+                                       additional_advice=additional_advice)
+            except json.JSONDecodeError:
+                return jsonify({"error": "Failed to parse the generated plan. Please try again."}), 500
+        else:
+            return jsonify({"error": "Failed to generate plan. Please try again later."}), 500
 
-                user_info = data['user_info']
-                training_plan = data['training_plan']
-                
-                after_json = plan[json_match.end():].strip()
-
-    return render_template('index.html', form=form, user_info=user_info, training_plan=training_plan, after_json=after_json)
-
+    return render_template('index.html', form=form)
 
 @app.errorhandler(429)
 def ratelimit_handler(e):
