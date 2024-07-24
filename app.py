@@ -35,7 +35,7 @@ class RunningPlanForm(FlaskForm):
     days_per_week = IntegerField('Running Days per Week', validators=[DataRequired(), NumberRange(min=1, max=7)])
     time_goal = StringField('Time Goal (if any)')
     recent_race = StringField('Recent Race Result (if any)')
-    units = SelectField('Units', choices=[('miles', 'Miles'), ('kilometers', 'Kilometers')], validators=[DataRequired()])
+    units = SelectField('Units', choices=[('Miles', 'Miles'), ('Kilometers', 'Kilometers')], validators=[DataRequired()])
 
 @lru_cache(maxsize=100)
 def generate_running_plan(fitness_level, goal, weeks, days_per_week, time_goal, recent_race, units):
@@ -163,11 +163,11 @@ def index():
     if form.validate_on_submit():
         plan_json = generate_running_plan(
             form.fitness_level.data,
-            form.goal.data,
+            form.goal.data.lower(),
             form.weeks.data,
             form.days_per_week.data,
             form.time_goal.data,
-            form.recent_race.data,
+            form.recent_race.data.lower(),
             form.units.data
         )
         if plan_json:
