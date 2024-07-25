@@ -138,7 +138,7 @@ def generate_running_plan(fitness_level, goal, weeks, days_per_week, time_goal, 
         return None
 
 def create_user_info_table(user_info):
-    table = "<table class='table table-striped'>"
+    table = "<table class='table table-dark'>"
     for key, value in user_info.items():
         if key == 'recent_race':
             table += f"<tr><th>{key.replace('_', ' ').title()}</th><td>{value['distance']} - {value['time']}</td></tr>"
@@ -148,7 +148,7 @@ def create_user_info_table(user_info):
     return table
 
 def create_training_plan_table(training_plan):
-    table = "<table class='table table-striped'>"
+    table = "<table class='table table-dark'>"
     table += "<thead><tr><th>Week</th><th>Day</th><th>Type</th><th>Distance</th><th>Description</th></tr></thead><tbody>"
     for week in training_plan:
         for workout in week['workouts']:
