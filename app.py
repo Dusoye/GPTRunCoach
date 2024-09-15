@@ -10,6 +10,8 @@ import json
 from functools import lru_cache
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+import csv
+from io import StringIO
 
 # Load environment variables
 load_dotenv()
@@ -156,8 +158,46 @@ def create_training_plan_table(training_plan):
     table += "</tbody></table>"
     return table
 
+@app.route('/download_plan/<plan_id>')
+def download_plan(plan_id):
+    # Retrieve the plan data based on the plan_id
+    # For now, we'll use a simple in-memory storage. In a real app, you'd use a database.
+    plan_data = app.config.get('latest_plan')
+    
+    if not plan_data:
+        return "Plan not found", 404
+
+    # Create a CSV file
+    output = StringIO()
+    writer = csv.writer(output)
+    
+    # Write headers
+    writer.writerow(['Week', 'Day', 'Type', 'Distance', 'Description'])
+    
+    # Write data
+    for week in plan_data['training_plan']:
+        for workout in week['workouts']:
+            writer.writerow([
+                week['week'],
+                workout['day'],
+                workout['type'],
+                workout['distance'],
+                workout['description']
+            ])
+    
+    # Prepare the output
+    output.seek(0)
+    
+    return send_file(
+        output,
+        mimetype='text/csv',
+        as_attachment=True,
+        download_name='running_plan.csv'
+    )
+
+
 @app.route('/', methods=['GET', 'POST'])
-@limiter.limit("10 per minute")
+@limiter.limit("5 per minute")
 def index():
     form = RunningPlanForm()
     if form.validate_on_submit():
