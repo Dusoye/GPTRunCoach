@@ -117,7 +117,7 @@ def generate_running_plan(fitness_level, goal, weeks, days_per_week, time_goal, 
     try:
         response = client.messages.create(
             model="claude-3-5-sonnet-20240620",
-            max_tokens=4000,
+            max_tokens=8000,
             temperature=0.1,
             system=system_prompt,
             messages=[        
@@ -177,7 +177,7 @@ def index():
                 training_plan_table = create_training_plan_table(data['training_plan'])
                 additional_advice = data['additional_advice']
 
-                return render_template('result.html', 
+                return render_template('result_dark.html', 
                                        user_info=user_info_table,
                                        training_plan=training_plan_table,
                                        additional_advice=additional_advice)
@@ -186,7 +186,7 @@ def index():
         else:
             return jsonify({"error": "Failed to generate plan. Please try again later."}), 500
 
-    return render_template('index.html', form=form)
+    return render_template('index_dark.html', form=form)
 
 @app.errorhandler(429)
 def ratelimit_handler(e):

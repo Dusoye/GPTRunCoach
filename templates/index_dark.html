@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running Plan Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex items-center justify-center">
+    <div class="container max-w-md mx-auto bg-gray-800 rounded-lg shadow-lg p-8">
+        <h1 class="text-3xl font-bold text-center text-blue-400 mb-6">Running Plan Generator</h1>
+        <form method="POST" class="space-y-4">
+            {{ form.hidden_tag() }}
+            
+            <div>
+                {{ form.fitness_level.label(class="block text-sm font-medium text-gray-300 mb-1") }}
+                {{ form.fitness_level(class="block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-100") }}
+            </div>
+            
+            <div>
+                {{ form.goal.label(class="block text-sm font-medium text-gray-300 mb-1") }}
+                {{ form.goal(class="block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-100") }}
+            </div>
+            
+            <div>
+                {{ form.weeks.label(class="block text-sm font-medium text-gray-300 mb-1") }}
+                {{ form.weeks(class="block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-100", type="number") }}
+            </div>
+            
+            <div>
+                {{ form.days_per_week.label(class="block text-sm font-medium text-gray-300 mb-1") }}
+                {{ form.days_per_week(class="block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-100", type="number") }}
+            </div>
+            
+            <div>
+                {{ form.time_goal.label(class="block text-sm font-medium text-gray-300 mb-1") }}
+                {{ form.time_goal(class="block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-100") }}
+            </div>
+            
+            <div>
+                {{ form.recent_race.label(class="block text-sm font-medium text-gray-300 mb-1") }}
+                {{ form.recent_race(class="block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-100") }}
+            </div>
+            
+            <div>
+                {{ form.units.label(class="block text-sm font-medium text-gray-300 mb-1") }}
+                {{ form.units(class="block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-100") }}
+            </div>
+            
+            <div class="text-center">
+                <button type="submit" class="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-300">Generate Plan</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
