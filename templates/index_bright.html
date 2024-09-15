@@ -21,69 +21,83 @@
         }
     </script>
     <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow-x: hidden;
+        }
         body {
-            background: linear-gradient(135deg, #FF7B9C, #FFA26B, #00D4FF, #FFD639);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,20 C60,20 65,25 65,35 C65,45 60,50 50,50 C40,50 35,45 35,35 C35,25 40,20 50,20 Z M30,60 Q50,85 70,60' fill='none' stroke='rgba(255,255,255,0.2)' stroke-width='2'/%3E%3C/svg%3E");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .content-wrapper {
+            background: linear-gradient(135deg, rgba(255,123,156,0.7), rgba(255,162,107,0.7), rgba(0,212,255,0.7), rgba(255,214,57,0.7));
             background-size: 400% 400%;
             animation: gradient 15s ease infinite;
+            min-height: 100vh;
+            width: 100vw;
         }
         @keyframes gradient {
             0% {background-position: 0% 50%;}
             50% {background-position: 100% 50%;}
             100% {background-position: 0% 50%;}
         }
-        .runner-bg {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M30,50 Q35,30 50,30 Q65,30 70,50 Q65,70 50,70 Q35,70 30,50 M50,30 L55,20 M50,70 L45,80 M30,50 L20,45 M70,50 L80,55' fill='none' stroke='rgba(255,255,255,0.2)' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
+        .darker-bg {
+            background-color: rgba(0, 0, 0, 0.4);
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
-    <div class="container max-w-md mx-auto bg-white bg-opacity-20 backdrop-blur-lg rounded-lg shadow-lg p-8 runner-bg">
-        <h1 class="text-3xl font-bold text-center text-white mb-6">Running Plan Generator</h1>
-        <form method="POST" class="space-y-4">
-            {{ form.hidden_tag() }}
-            
-            <div>
-                {{ form.fitness_level.label(class="block text-sm font-medium text-white mb-1") }}
-                {{ form.fitness_level(class="block w-full px-3 py-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-custom-blue focus:border-custom-blue text-white placeholder-white placeholder-opacity-70") }}
-            </div>
-            
-            <div>
-                {{ form.goal.label(class="block text-sm font-medium text-white mb-1") }}
-                {{ form.goal(class="block w-full px-3 py-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-custom-blue focus:border-custom-blue text-white placeholder-white placeholder-opacity-70") }}
-            </div>
-            
-            <div>
-                {{ form.weeks.label(class="block text-sm font-medium text-white mb-1") }}
-                {{ form.weeks(class="block w-full px-3 py-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-custom-blue focus:border-custom-blue text-white placeholder-white placeholder-opacity-70", type="number") }}
-            </div>
-            
-            <div>
-                {{ form.days_per_week.label(class="block text-sm font-medium text-white mb-1") }}
-                {{ form.days_per_week(class="block w-full px-3 py-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-custom-blue focus:border-custom-blue text-white placeholder-white placeholder-opacity-70", type="number") }}
-            </div>
-            
-            <div>
-                {{ form.time_goal.label(class="block text-sm font-medium text-white mb-1") }}
-                {{ form.time_goal(class="block w-full px-3 py-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-custom-blue focus:border-custom-blue text-white placeholder-white placeholder-opacity-70") }}
-            </div>
-            
-            <div>
-                {{ form.recent_race.label(class="block text-sm font-medium text-white mb-1") }}
-                {{ form.recent_race(class="block w-full px-3 py-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-custom-blue focus:border-custom-blue text-white placeholder-white placeholder-opacity-70") }}
-            </div>
-            
-            <div>
-                {{ form.units.label(class="block text-sm font-medium text-white mb-1") }}
-                {{ form.units(class="block w-full px-3 py-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-custom-blue focus:border-custom-blue text-white placeholder-white placeholder-opacity-70") }}
-            </div>
-            
-            <div class="text-center">
-                <button type="submit" class="w-full px-4 py-2 text-white bg-custom-orange rounded-md hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-custom-yellow focus:ring-offset-2 transition-colors duration-300">Generate Plan</button>
-            </div>
-        </form>
+<body class="text-white">
+    <div class="content-wrapper flex items-center justify-center p-4">
+        <div class="container max-w-md mx-auto bg-black bg-opacity-30 backdrop-blur-lg rounded-lg shadow-lg p-8">
+ 
+            <h1 class="text-3xl font-bold text-center text-white mb-6">Running Plan Generator</h1>
+            <form method="POST" class="space-y-4">
+                {{ form.hidden_tag() }}
+                
+                <div>
+                    {{ form.fitness_level.label(class="block text-sm font-medium text-white mb-1") }}
+                    {{ form.fitness_level(class="block w-full px-3 py-2 darker-bg border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-custom-blue focus:border-custom-blue text-white") }}
+                </div>
+                
+                <div>
+                    {{ form.goal.label(class="block text-sm font-medium text-white mb-1") }}
+                    {{ form.goal(class="block w-full px-3 py-2 darker-bg border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-custom-blue focus:border-custom-blue text-white") }}
+                </div>
+                
+                <div>
+                    {{ form.weeks.label(class="block text-sm font-medium text-white mb-1") }}
+                    {{ form.weeks(class="block w-full px-3 py-2 darker-bg border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-custom-blue focus:border-custom-blue text-white", type="number") }}
+                </div>
+                
+                <div>
+                    {{ form.days_per_week.label(class="block text-sm font-medium text-white mb-1") }}
+                    {{ form.days_per_week(class="block w-full px-3 py-2 darker-bg border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-custom-blue focus:border-custom-blue text-white", type="number") }}
+                </div>
+                
+                <div>
+                    {{ form.time_goal.label(class="block text-sm font-medium text-white mb-1") }}
+                    {{ form.time_goal(class="block w-full px-3 py-2 darker-bg border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-custom-blue focus:border-custom-blue text-white") }}
+                </div>
+                
+                <div>
+                    {{ form.recent_race.label(class="block text-sm font-medium text-white mb-1") }}
+                    {{ form.recent_race(class="block w-full px-3 py-2 darker-bg border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-custom-blue focus:border-custom-blue text-white") }}
+                </div>
+                
+                <div>
+                    {{ form.units.label(class="block text-sm font-medium text-white mb-1") }}
+                    {{ form.units(class="block w-full px-3 py-2 darker-bg border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-custom-blue focus:border-custom-blue text-white") }}
+                </div>
+                
+                <div class="text-center">
+                    <button type="submit" class="w-full px-4 py-2 text-white bg-custom-orange rounded-md hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-custom-yellow focus:ring-offset-2 transition-colors duration-300">Generate Plan</button>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 </html>

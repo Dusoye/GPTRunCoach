@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
 from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect
 from wtforms import StringField, SelectField, IntegerField
@@ -11,7 +11,7 @@ from functools import lru_cache
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import csv
-from io import StringIO
+from io import BytesIO
 
 # Load environment variables
 load_dotenv()
@@ -168,7 +168,7 @@ def download_plan(plan_id):
         return "Plan not found", 404
 
     # Create a CSV file
-    output = StringIO()
+    output = BytesIO()
     writer = csv.writer(output)
     
     # Write headers
