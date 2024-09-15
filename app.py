@@ -195,7 +195,6 @@ def download_plan(plan_id):
         download_name='running_plan.csv'
     )
 
-
 @app.route('/', methods=['GET', 'POST'])
 @limiter.limit("5 per minute")
 def index():
@@ -213,20 +212,19 @@ def index():
         if plan_json:
             try:
                 data = json.loads(plan_json)
-                user_info_table = create_user_info_table(data['user_info'])
-                training_plan_table = create_training_plan_table(data['training_plan'])
-                additional_advice = data['additional_advice']
-
-                return render_template('result_dark.html', 
-                                       user_info=user_info_table,
-                                       training_plan=training_plan_table,
-                                       additional_advice=additional_advice)
+                # Store the latest plan in app config (this is a simple solution, not suitable for production)
+                app.config['latest_plan'] = data
+                return render_template('result_bright.html', 
+                                       user_info=data['user_info'],
+                                       training_plan=data['training_plan'],
+                                       additional_advice=data['additional_advice'],
+                                       plan_id='latest')  # In a real app, use a unique identifier
             except json.JSONDecodeError:
                 return jsonify({"error": "Failed to parse the generated plan. Please try again."}), 500
         else:
             return jsonify({"error": "Failed to generate plan. Please try again later."}), 500
 
-    return render_template('index_dark.html', form=form)
+    return render_template('index_bright.html', form=form)
 
 @app.errorhandler(429)
 def ratelimit_handler(e):
