@@ -11,7 +11,7 @@ from functools import lru_cache
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import csv
-from io import BytesIO
+from io import StringIO, BytesIO
 
 # Load environment variables
 load_dotenv()
@@ -167,8 +167,8 @@ def download_plan(plan_id):
     if not plan_data:
         return "Plan not found", 404
 
-    # Create a CSV file
-    output = BytesIO()
+    # Create a CSV file in memory
+    output = StringIO()
     writer = csv.writer(output)
     
     # Write headers
@@ -185,15 +185,18 @@ def download_plan(plan_id):
                 workout['description']
             ])
     
-    # Prepare the output
-    output.seek(0)
+    # Convert to BytesIO
+    mem = BytesIO()
+    mem.write(output.getvalue().encode('utf-8'))
+    mem.seek(0)
     
     return send_file(
-        output,
+        mem,
         mimetype='text/csv',
         as_attachment=True,
         download_name='running_plan.csv'
     )
+
 
 @app.route('/', methods=['GET', 'POST'])
 @limiter.limit("5 per minute")
