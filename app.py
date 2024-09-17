@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, jsonify, send_file
+from flask import Flask, render_template, request, jsonify, send_file, flash
 from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect
 from wtforms import StringField, SelectField, IntegerField
@@ -12,6 +12,11 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import csv
 from io import StringIO, BytesIO
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter, landscape
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
 
 # Load environment variables
 load_dotenv()
@@ -157,6 +162,124 @@ def create_training_plan_table(training_plan):
             table += f"<tr><td>{week['week']}</td><td>{workout['day']}</td><td>{workout['type']}</td><td>{workout['distance']}</td><td>{workout['description']}</td></tr>"
     table += "</tbody></table>"
     return table
+
+def generate_pdf(plan_data):
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=landscape(letter), rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=18)
+    elements = []
+    
+    styles = getSampleStyleSheet()
+    title_style = styles['Title']
+    heading_style = styles['Heading2']
+    normal_style = styles['Normal']
+    
+    # Title
+    elements.append(Paragraph("Your Running Plan", title_style))
+    elements.append(Spacer(1, 12))
+    
+    # User Information
+    elements.append(Paragraph("User Information", heading_style))
+    user_info = [
+        ["Fitness Level", plan_data['user_info']['fitness_level']],
+        ["Goal", plan_data['user_info']['goal']],
+        ["Recent Race", f"{plan_data['user_info']['recent_race']['distance']} - {plan_data['user_info']['recent_race']['time']}"],
+        ["Training Duration", f"{plan_data['user_info']['training_duration_weeks']} weeks"],
+        ["Days Per Week", str(plan_data['user_info']['days_per_week'])],
+        ["Time Goal", plan_data['user_info']['time_goal']],
+        ["Preferred Unit", plan_data['user_info']['preferred_unit']]
+    ]
+    user_table = Table(user_info)
+    user_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, -1), colors.lightgrey),
+        ('TEXTCOLOR', (0, 0), (-1, -1), colors.black),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
+        ('FONTSIZE', (0, 0), (-1, -1), 10),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 12),
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 12),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+        ('ALIGN', (0, 1), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+        ('FONTSIZE', (0, 1), (-1, -1), 10),
+        ('BOTTOMPADDING', (0, 1), (-1, -1), 6),
+    ]))
+    elements.append(user_table)
+    elements.append(Spacer(1, 12))
+    
+        # Training Plan
+    elements.append(Paragraph("Training Plan", heading_style))
+    plan_data_list = [['Week', 'Day', 'Type', 'Distance', 'Description']]
+    for week in plan_data['training_plan']:
+        for workout in week['workouts']:
+            plan_data_list.append([
+                str(week['week']),
+                str(workout['day']),
+                workout['type'],
+                workout['distance'],
+                Paragraph(workout['description'], normal_style)
+            ])
+    
+    col_widths = [0.5*inch, 0.5*inch, 1*inch, 0.75*inch, 5.25*inch]  # Adjust these values as needed
+    plan_table = Table(plan_data_list, colWidths=col_widths, repeatRows=1)
+    plan_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 12),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+        ('ALIGN', (0, 1), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+        ('FONTSIZE', (0, 1), (-1, -1), 10),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('WORDWRAP', (0, 0), (-1, -1), True),
+        ('LEFTPADDING', (0, 0), (-1, -1), 6),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+        ('TOPPADDING', (0, 0), (-1, -1), 3),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+    ]))
+    elements.append(plan_table)
+    elements.append(Spacer(1, 12))
+    
+    # Additional Advice
+    elements.append(Paragraph("Additional Advice", heading_style))
+    elements.append(Paragraph(plan_data['additional_advice'], normal_style))
+    
+    doc.build(elements)
+    buffer.seek(0)
+    return buffer
+
+@app.route('/download_plan_pdf/<plan_id>')
+def download_plan_pdf(plan_id):
+    plan_data = app.config.get('latest_plan')
+    
+    if not plan_data:
+        flash("Plan not found. Please generate a new plan.", "error")
+        return redirect(url_for('index'))
+
+    try:
+        pdf_buffer = generate_pdf(plan_data)
+        
+        return send_file(
+            pdf_buffer,
+            mimetype='application/pdf',
+            as_attachment=True,
+            download_name='running_plan.pdf'
+        )
+    except Exception as e:
+        app.logger.error(f"Error generating PDF: {str(e)}")
+        flash("An error occurred while generating the PDF. Please try again.", "error")
+        return redirect(url_for('index'))
+
 
 @app.route('/download_plan/<plan_id>')
 def download_plan(plan_id):

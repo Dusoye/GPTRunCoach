@@ -82,6 +82,16 @@
         <div class="container max-w-6xl mx-auto bg-black bg-opacity-30 backdrop-blur-lg rounded-lg shadow-lg p-8">
             <h1 class="text-3xl font-bold text-center text-white mb-8">Your Running Plan</h1>
             
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="mb-4 p-4 rounded-md {% if category == 'error' %}bg-red-500{% else %}bg-green-500{% endif %} text-white">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
             <section class="mb-8">
                 <h2 class="text-2xl font-semibold text-white mb-4">User Information</h2>
                 <div class="darker-bg rounded-lg p-4">
@@ -155,6 +165,8 @@
             
             <div class="text-center space-y-4">
                 <a href="{{ url_for('download_plan', plan_id='latest') }}" class="inline-block px-6 py-3 text-white bg-custom-blue rounded-md hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-custom-yellow focus:ring-offset-2 transition-colors duration-300">Download Plan (CSV)</a>
+                <br>
+                <a href="{{ url_for('download_plan_pdf', plan_id='latest') }}" class="inline-block px-6 py-3 text-white bg-custom-pink rounded-md hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-custom-yellow focus:ring-offset-2 transition-colors duration-300">Download Plan (PDF)</a>
                 <br>
                 <a href="/" class="inline-block px-6 py-3 text-white bg-custom-orange rounded-md hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-custom-yellow focus:ring-offset-2 transition-colors duration-300">Generate Another Plan</a>
             </div>
