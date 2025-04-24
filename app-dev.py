@@ -340,7 +340,7 @@ def index():
                 data = json.loads(plan_json)
                 # Store the latest plan in app config (this is a simple solution, not suitable for production)
                 app.config['latest_plan'] = data
-                return render_template('result_bright.html', 
+                return render_template('result_dev.html', 
                                        user_info=data['user_info'],
                                        training_plan=data['training_plan'],
                                        additional_advice=data['additional_advice'],

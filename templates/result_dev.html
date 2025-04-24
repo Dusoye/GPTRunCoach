@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Running Plan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'custom-pink': '#FF7B9C',
+                        'custom-orange': '#FFA26B',
+                        'custom-blue': '#00D4FF',
+                        'custom-yellow': '#FFD639',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow-x: hidden;
+        }
+        body {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,20 C60,20 65,25 65,35 C65,45 60,50 50,50 C40,50 35,45 35,35 C35,25 40,20 50,20 Z M30,60 Q50,85 70,60' fill='none' stroke='rgba(255,255,255,0.2)' stroke-width='2'/%3E%3C/svg%3E");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .content-wrapper {
+            background: linear-gradient(135deg, rgba(255,123,156,0.7), rgba(255,162,107,0.7), rgba(0,212,255,0.7), rgba(255,214,57,0.7));
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            min-height: 100vh;
+            width: 100vw;
+        }
+        @keyframes gradient {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+        .training-plan-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .training-plan-table th, .training-plan-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        .training-plan-table th {
+            background-color: rgba(0, 0, 0, 0.4);
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .training-plan-table tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+        .training-plan-table tr:nth-child(odd) {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        .training-plan-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .darker-bg {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+<body class="text-white">
+    <div class="content-wrapper py-12 px-4">
+        <div class="container max-w-6xl mx-auto bg-black bg-opacity-30 backdrop-blur-lg rounded-lg shadow-lg p-8">
+            <h1 class="text-3xl font-bold text-center text-white mb-8">Your Running Plan</h1>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="mb-4 p-4 rounded-md {% if category == 'error' %}bg-red-500{% else %}bg-green-500{% endif %} text-white">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <section class="mb-8">
+                <h2 class="text-2xl font-semibold text-white mb-4">User Information</h2>
+                <div class="darker-bg rounded-lg p-4">
+                    <table class="w-full">
+                        <tr>
+                            <td class="font-bold pr-4">Fitness Level:</td>
+                            <td>{{ user_info.fitness_level }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-4">Goal:</td>
+                            <td>{{ user_info.goal }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-4">Recent Race:</td>
+                            <td>{{ user_info.recent_race.distance }} - {{ user_info.recent_race.time }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-4">Training Duration:</td>
+                            <td>{{ user_info.training_duration_weeks }} weeks</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-4">Days Per Week:</td>
+                            <td>{{ user_info.days_per_week }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-4">Time Goal:</td>
+                            <td>{{ user_info.time_goal }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-4">Preferred Unit:</td>
+                            <td>{{ user_info.preferred_unit }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+            
+            <section class="mb-8">
+                <h2 class="text-2xl font-semibold text-white mb-4">Training Plan</h2>
+                <div class="overflow-x-auto darker-bg rounded-lg p-4">
+                    <table class="training-plan-table">
+                        <thead>
+                            <tr>
+                                <th>Week</th>
+                                <th>Day</th>
+                                <th>Type</th>
+                                <th>Distance</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for week in training_plan %}
+                                {% for workout in week.workouts %}
+                                    <tr>
+                                        <td>{{ week.week }}</td>
+                                        <td>{{ workout.day }}</td>
+                                        <td>{{ workout.type }}</td>
+                                        <td>{{ workout.distance }}</td>
+                                        <td>{{ workout.description }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <section class="mb-8">
+                <h2 class="text-2xl font-semibold text-white mb-4">Additional Advice</h2>
+                <p class="darker-bg rounded-lg p-4">{{ additional_advice }}</p>
+            </section>
+            
+            <div class="text-center space-y-4">
+                <a href="{{ url_for('download_plan', plan_id='latest') }}" class="inline-block px-6 py-3 text-white bg-custom-blue rounded-md hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-custom-yellow focus:ring-offset-2 transition-colors duration-300">Download Plan (CSV)</a>
+                <br>
+                <a href="{{ url_for('download_plan_pdf', plan_id='latest') }}" class="inline-block px-6 py-3 text-white bg-custom-pink rounded-md hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-custom-yellow focus:ring-offset-2 transition-colors duration-300">Download Plan (PDF)</a>
+                <br>
+                <a href="/" class="inline-block px-6 py-3 text-white bg-custom-orange rounded-md hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-custom-yellow focus:ring-offset-2 transition-colors duration-300">Generate Another Plan</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

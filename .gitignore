@@ -1,3 +1,4 @@
 python_dotenv.env
 .gitignore
 .env
+.DS_Store
